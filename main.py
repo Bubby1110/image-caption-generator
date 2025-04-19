@@ -1,3 +1,7 @@
+
+# add any other packages you use, like:
+# nltk
+# opencv-python
 import streamlit as st
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras.models import load_model
