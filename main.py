@@ -65,5 +65,8 @@ def main():
     #generate caption and display image
     generate_and_display_caption('uploaded_image.jpg',model_path,tokenizer_path,feature_extractor_path)
 
-    if __name__=="__main__":
-        main()
+    def main():
+    st.title("Image Caption Generator")
+    # rest of the code
+
+    main()  # Call it directly
