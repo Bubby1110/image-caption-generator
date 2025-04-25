@@ -7,17 +7,23 @@ import matplotlib.pyplot as plt
 import pickle
 
 def generate_and_display_caption(image_path, model_path, tokenizer_path, feature_extractor_path, max_length=34, img_size=224):
+    # Load the caption model
     caption_model = load_model(model_path)
+    
+    # Load the feature extractor model (e.g., pre-trained CNN for image feature extraction)
     feature_extractor = load_model(feature_extractor_path)
 
+    # Load the tokenizer
     with open(tokenizer_path, "rb") as f:
         tokenizer = pickle.load(f)
 
+    # Process the image
     img = load_img(image_path, target_size=(img_size, img_size))
-    img = img_to_array(img) / 255.0
-    img = np.expand_dims(img, axis=0)
+    img = img_to_array(img) / 255.0  # Normalize the image
+    img = np.expand_dims(img, axis=0)  # Add batch dimension
     image_features = feature_extractor.predict(img, verbose=0)
 
+    # Start captioning with "startseq"
     in_text = "startseq"
     for _ in range(max_length):
         sequence = tokenizer.texts_to_sequences([in_text])[0]
@@ -30,6 +36,7 @@ def generate_and_display_caption(image_path, model_path, tokenizer_path, feature
         in_text += " " + word
     caption = in_text.replace("startseq", "").replace("endseq", "").strip()
 
+    # Display image and caption
     img = load_img(image_path, target_size=(img_size, img_size))
     plt.figure(figsize=(8, 8))
     plt.imshow(img)
@@ -50,6 +57,7 @@ def main():
         tokenizer_path = "model/tokenizer.pkl"
         feature_extractor_path = "model/feature_extractor.keras"
 
+        # Call the function to generate and display the caption
         generate_and_display_caption('uploaded_image.jpg', model_path, tokenizer_path, feature_extractor_path)
 
 if __name__ == "__main__":
